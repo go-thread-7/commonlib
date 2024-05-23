@@ -5,21 +5,13 @@ import (
 	"time"
 
 	"github.com/cenkalti/backoff/v4"
+	"github.com/go-thread-7/commonlib/gormpg/config"
 	"github.com/pkg/errors"
 	gorm_postgres "gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-type GormPostgresConfig struct {
-	Host     string `mapstructure:"host"`
-	Port     int    `mapstructure:"port"`
-	User     string `mapstructure:"user"`
-	DBName   string `mapstructure:"dbName"`
-	SSLMode  bool   `mapstructure:"sslMode"`
-	Password string `mapstructure:"password"`
-}
-
-func New(config *GormPostgresConfig) (*gorm.DB, error) {
+func New(config *config.GORMPostgresConfig) (*gorm.DB, error) {
 
 	bo := backoff.NewExponentialBackOff()
 	bo.MaxElapsedTime = 10 * time.Second

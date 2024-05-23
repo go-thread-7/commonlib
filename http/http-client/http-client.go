@@ -19,11 +19,9 @@ const (
 )
 
 func New() *resty.Client {
-
 	client := resty.New().
 		SetTimeout(timeout).
 		SetRetryCount(retryCount).
-		SetRetryWaitTime(retryWaitTime) // use custom transport open-telemetry for tracing http-client
-
+		SetRetryWaitTime(retryWaitTime)
 	return client
 }

@@ -10,7 +10,6 @@ import (
 
 func NewContext() context.Context {
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM, syscall.SIGINT)
-
 	go func() {
 		for {
 			select {
@@ -21,6 +20,5 @@ func NewContext() context.Context {
 			}
 		}
 	}()
-
 	return ctx
 }

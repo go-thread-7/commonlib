@@ -3,15 +3,10 @@ package grpcclient
 import (
 	"fmt"
 
+	"github.com/go-thread-7/commonlib/grpc/grpc-client/config"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
-
-type GrpcConfig struct {
-	Port        string `mapstructure:"port"`
-	Host        string `mapstructure:"host"`
-	Development bool   `mapstructure:"development"`
-}
 
 type grpcClient struct {
 	conn *grpc.ClientConn
@@ -22,7 +17,7 @@ type GrpcClient interface {
 	Close() error
 }
 
-func New(config *GrpcConfig) (GrpcClient, error) {
+func New(config *config.GRPCConfig) (GrpcClient, error) {
 	conn, err := grpc.Dial(fmt.Sprintf("%s%s", config.Host, config.Port),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
