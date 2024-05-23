@@ -24,7 +24,7 @@ type EchoConfig struct {
 	Host                string   `mapstructure:"host"`
 }
 
-func NewEchoServer() *echo.Echo {
+func New() *echo.Echo {
 	e := echo.New()
 	return e
 }

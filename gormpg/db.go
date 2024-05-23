@@ -1,4 +1,4 @@
-package gormpgsql
+package gormpg
 
 import (
 	"fmt"
@@ -20,6 +20,11 @@ type GormPostgresConfig struct {
 }
 
 func New(config *GormPostgresConfig) (*gorm.DB, error) {
+
+	bo := backoff.NewExponentialBackOff()
+	bo.MaxElapsedTime = 10 * time.Second
+	maxRetries := 5
+
 	dsn := fmt.Sprintf("host=%s port=%d user=%s dbname=%s password=%s",
 		config.Host,
 		config.Port,
@@ -28,19 +33,15 @@ func New(config *GormPostgresConfig) (*gorm.DB, error) {
 		config.Password,
 	)
 
-	bo := backoff.NewExponentialBackOff()
-	bo.MaxElapsedTime = 10 * time.Second
-	maxRetries := 5
-
-	var gormDb *gorm.DB
+	var db *gorm.DB
 	var err error
 	err = backoff.Retry(func() error {
-		gormDb, err = gorm.Open(gorm_postgres.Open(dsn), &gorm.Config{})
+		db, err = gorm.Open(gorm_postgres.Open(dsn), &gorm.Config{})
 		if err != nil {
 			return errors.Errorf("failed to connect postgres: %v and connection information: %s", err, dsn)
 		}
 		return nil
 	}, backoff.WithMaxRetries(bo, uint64(maxRetries-1)))
 
-	return gormDb, err
+	return db, err
 }

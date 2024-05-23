@@ -18,7 +18,7 @@ const (
 	responseHeaderTimeout = 5 * time.Second
 )
 
-func NewHttpClient() *resty.Client {
+func New() *resty.Client {
 
 	client := resty.New().
 		SetTimeout(timeout).

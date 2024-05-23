@@ -30,7 +30,7 @@ type GrpcServer struct {
 	Config *GrpcConfig
 }
 
-func NewGrpcServer(config *GrpcConfig) *GrpcServer {
+func New(config *GrpcConfig) *GrpcServer {
 	s := grpc.NewServer(
 		grpc.KeepaliveParams(keepalive.ServerParameters{
 			MaxConnectionIdle: maxConnectionIdle * time.Minute,
