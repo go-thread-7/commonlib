@@ -15,14 +15,14 @@ import (
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
-type goMigratePostgresMigrator struct {
+type migrator struct {
 	config     *config.MigrationOptions
 	db         *sql.DB
 	datasource string
 	migration  *migrate.Migrate
 }
 
-func NewGoMigratorPostgres(config *config.MigrationOptions, db *sql.DB) (contracts.PostgresMigrationRunner, error) {
+func New(config *config.MigrationOptions, db *sql.DB) (contracts.PostgresMigrationRunner, error) {
 	datasource := fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=disable",
 		config.User,
 		config.Password,
@@ -36,7 +36,7 @@ func NewGoMigratorPostgres(config *config.MigrationOptions, db *sql.DB) (contrac
 		return nil, errors.WrapIf(err, "failed to initialize migrator")
 	}
 
-	return &goMigratePostgresMigrator{
+	return &migrator{
 		config:     config,
 		db:         db,
 		datasource: datasource,
@@ -44,7 +44,7 @@ func NewGoMigratorPostgres(config *config.MigrationOptions, db *sql.DB) (contrac
 	}, nil
 }
 
-func (m *goMigratePostgresMigrator) Up(_ context.Context, version uint) error {
+func (m *migrator) Up(_ context.Context, version uint) error {
 	if m.config.SkipMigration {
 		log.Println("database migration skipped")
 		return nil
@@ -63,7 +63,7 @@ func (m *goMigratePostgresMigrator) Up(_ context.Context, version uint) error {
 	return nil
 }
 
-func (m *goMigratePostgresMigrator) Down(_ context.Context, version uint) error {
+func (m *migrator) Down(_ context.Context, version uint) error {
 	if m.config.SkipMigration {
 		log.Println("database migration skipped")
 		return nil
@@ -82,7 +82,7 @@ func (m *goMigratePostgresMigrator) Down(_ context.Context, version uint) error 
 	return nil
 }
 
-func (m *goMigratePostgresMigrator) executeCommand(command config.CommandType, version uint) error {
+func (m *migrator) executeCommand(command config.CommandType, version uint) error {
 	var err error
 	switch command {
 	case config.Up:
