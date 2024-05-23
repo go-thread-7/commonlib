@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"emperror.dev/errors"
+	"github.com/go-thread-7/commonlib/grpc/grpc-server/config"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
 	"google.golang.org/grpc/reflection"
@@ -19,18 +20,12 @@ const (
 	gRPCTime          = 10
 )
 
-type GrpcConfig struct {
-	Port        string `mapstructure:"port"`
-	Host        string `mapstructure:"host"`
-	Development bool   `mapstructure:"development"`
-}
-
 type GrpcServer struct {
 	Grpc   *grpc.Server
-	Config *GrpcConfig
+	Config *config.GRPCConfig
 }
 
-func New(config *GrpcConfig) *GrpcServer {
+func New(config *config.GRPCConfig) *GrpcServer {
 	s := grpc.NewServer(
 		grpc.KeepaliveParams(keepalive.ServerParameters{
 			MaxConnectionIdle: maxConnectionIdle * time.Minute,
