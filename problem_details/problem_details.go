@@ -151,11 +151,11 @@ func ResolveProblemDetails(w http.ResponseWriter, r *http.Request, err error) (P
 		return mapStatus, mapStatusErr
 	}
 
-	var p, errr = setDefaultProblemDetails(w, r, err, statusCode)
-	if errr != nil {
+	p, err := setDefaultProblemDetails(w, r, err, statusCode)
+	if err != nil {
 		return nil, err
 	}
-	return p, errr
+	return p, err
 }
 
 func setMapCustomType(w http.ResponseWriter, r *http.Request, err error) (ProblemDetailErr, error) {
