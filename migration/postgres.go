@@ -2,12 +2,12 @@ package migration
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 	"log"
 
 	"github.com/go-thread-7/commonlib/migration/config"
 	"github.com/go-thread-7/commonlib/migration/contracts"
+	"gorm.io/gorm"
 
 	"emperror.dev/errors"
 	"github.com/golang-migrate/migrate"
@@ -18,12 +18,12 @@ import (
 
 type migrator struct {
 	config     *config.MigrationOptions
-	db         *sql.DB
+	db         *gorm.DB
 	datasource string
 	migration  *migrate.Migrate
 }
 
-func New(config *config.MigrationOptions, db *sql.DB) (contracts.PostgresMigrationRunner, error) {
+func New(config *config.MigrationOptions, db *gorm.DB) (contracts.PostgresMigrationRunner, error) {
 	datasource := fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=disable",
 		config.User,
 		config.Password,
